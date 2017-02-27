@@ -1,2 +1,2 @@
-# firebase-rest-cron-service
-Trigger stuff on Firebase with cronjobs (or something else) with Firebase's REST API
+# firebase-rest-service
+Trigger stuff on Firebase with cronjobs (or something else)

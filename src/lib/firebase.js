@@ -4,7 +4,7 @@ import * as firebase from 'firebase'
 
 const { firebase: config } = require(path.resolve(__dirname, '../config.json'))
 
-const app = firebase.initializeApp({
+firebase.initializeApp({
   apiKey: config.apiKey,
   authDomain: config.authDomain,
   databaseURL: config.databaseURL

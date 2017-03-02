@@ -37,7 +37,7 @@ module.exports = {
     }]
   },
   externals: [{
-    'firebase': true
+    'firebase-admin': true
   }],
   target: 'node',
   plugins: [

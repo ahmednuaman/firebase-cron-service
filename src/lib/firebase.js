@@ -9,11 +9,17 @@ firebase.initializeApp({
 })
 
 export default (path, data, callback) => {
+  const done = (...args) => {
+    firebase
+      .database()
+      .goOffline()
+
+    console.log(...args)
+    callback(...args)
+  }
+
   firebase
     .database()
     .ref(path)
-    .set(data, (error) => {
-      callback(error)
-      process.exit()
-    })
+    .set(data, done)
 }

@@ -20,8 +20,7 @@
   },
   "homepage": "https://github.com/ahmednuaman/firebase-cron-service#readme",
   "dependencies": {
-    "firebase": "^3.6.10",
-    "yargs": "^6.6.0"
+    "firebase": "^3.6.10"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",

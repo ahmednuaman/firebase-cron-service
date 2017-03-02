@@ -45,6 +45,8 @@ module.exports = {
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.optimize.UglifyJsPlugin(),
     new WebpackCopyPlugin([{
+      from: '../config.json'
+    }, {
       from: '../package.json'
     }]),
     new NpmInstallPlugin()

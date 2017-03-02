@@ -10,18 +10,18 @@ firebase.initializeApp({
   databaseURL: config.databaseURL
 })
 
-const error = (reason) => console.log('Sign in failed', reason)
-const finish = () => process.exit()
+const error = (callback) => (reason) => callback(reason)
+const finish = (callback) => () => callback()
 
-firebase
-  .auth()
-  .signInWithEmailAndPassword(config.email, config.password)
-  .then(null, error)
-
-export default (path, data) => {
+export default (path, data, callback) => {
   firebase
-    .database()
-    .ref(path)
-    .set(data)
-    .then(finish, finish)
+    .auth()
+    .signInWithEmailAndPassword(config.email, config.password)
+    .then(() => {
+      firebase
+        .database()
+        .ref(path)
+        .set(data)
+        .then(finish(callback), error(callback))
+    }, error(callback))
 }

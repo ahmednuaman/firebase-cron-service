@@ -1,8 +1,6 @@
-import path from 'path'
-
 import * as firebase from 'firebase'
 
-const { firebase: config } = require(path.resolve(__dirname, '../config.json'))
+const { firebase: config } = require('../../config.json')
 
 firebase.initializeApp({
   apiKey: config.apiKey,
@@ -10,18 +8,18 @@ firebase.initializeApp({
   databaseURL: config.databaseURL
 })
 
-const error = (callback) => (reason) => callback(reason)
-const finish = (callback) => () => callback()
+const finished = (callback) => (reason) => callback(reason)
 
 export default (path, data, callback) => {
   firebase
     .auth()
     .signInWithEmailAndPassword(config.email, config.password)
     .then(() => {
+      console.log('Signed in')
+
       firebase
         .database()
         .ref(path)
-        .set(data)
-        .then(finish(callback), error(callback))
-    }, error(callback))
+        .set(data, finished(callback))
+    }, finished(callback))
 }

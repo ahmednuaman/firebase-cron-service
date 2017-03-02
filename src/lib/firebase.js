@@ -12,5 +12,5 @@ export default (path, data, callback) => {
   firebase
     .database()
     .ref(path)
-    .set(data, (error) => callback(error))
+    .set(data, callback)
 }

@@ -18,7 +18,9 @@ NpmInstallPlugin.prototype.apply = (compiler) => {
 
 module.exports = {
   context: path.resolve(__dirname, 'src'),
-  entry: './index.js',
+  entry: {
+    index: './index.js'
+  },
   output: {
     libraryTarget: 'commonjs2',
     path: BUILD_DIR,

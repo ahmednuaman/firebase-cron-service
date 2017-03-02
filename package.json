@@ -4,7 +4,7 @@
   "description": "Trigger stuff on Firebase with cronjobs (or something else)",
   "main": "index.js",
   "scripts": {
-    "build": "npm test; webpack; bestzip lambda.zip build/",
+    "build": "npm test; webpack; cd build; bestzip ../lambda.zip *",
     "start": "babel-node ./index.js",
     "test": "standard"
   },

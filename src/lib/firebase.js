@@ -8,11 +8,9 @@ firebase.initializeApp({
   databaseURL: config.databaseURL
 })
 
-const finished = (callback) => (reason) => callback(reason)
-
 export default (path, data, callback) => {
   firebase
     .database()
     .ref(path)
-    .set(data, finished(callback))
+    .set(data, (error) => callback(error))
 }

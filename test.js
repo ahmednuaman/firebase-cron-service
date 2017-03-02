@@ -1,8 +1,11 @@
 const index = require('./build/index')
 
-const cb = (...args) => console.log(...args)
+const cb = (...args) => {
+  console.log(...args)
+  process.exit()
+}
 
 index.handler({
   path: '/gardenLights',
-  data: 'true'
+  data: false
 }, null, cb)

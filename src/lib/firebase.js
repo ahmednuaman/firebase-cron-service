@@ -4,7 +4,7 @@ const { firebase: config } = require('../../config.json')
 const serviceAccount = require('../../service-account-key.json')
 
 firebase.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+  credential: firebase.credential.cert(serviceAccount),
   databaseURL: config.databaseURL
 })
 

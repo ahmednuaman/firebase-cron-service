@@ -15,7 +15,7 @@ export default (path, data, callback) => {
     .getAccessToken()
     .then(({ access_token }) => {
       request
-        .post(`${config.databaseURL}/${path}.json`, {
+        .put(`${config.databaseURL}/${path}.json`, {
           auth: {
             bearer: access_token
           },

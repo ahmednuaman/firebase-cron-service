@@ -7,5 +7,5 @@ const cb = (...args) => {
 
 index.handler({
   path: '/gardenLights',
-  data: false
+  data: true
 }, null, cb)

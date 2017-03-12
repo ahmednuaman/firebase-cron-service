@@ -1,25 +1,32 @@
 import * as firebase from 'firebase-admin'
+import request from 'request'
 
 const { firebase: config } = require('../../config.json')
 const serviceAccount = require('../../service-account-key.json')
+const credential = firebase.credential.cert(serviceAccount)
 
 firebase.initializeApp({
-  credential: firebase.credential.cert(serviceAccount),
+  credential: credential,
   databaseURL: config.databaseURL
 })
 
 export default (path, data, callback) => {
-  const done = (...args) => {
-    firebase
-      .database()
-      .goOffline()
-
-    console.log(...args)
-    callback(...args)
-  }
-
-  firebase
-    .database()
-    .ref(path)
-    .set(data, done)
+  credential
+    .getAccessToken()
+    .then(({ access_token }) => {
+      request
+        .post(`${config.databaseURL}/${path}.json`, {
+          auth: {
+            bearer: access_token
+          },
+          json: true,
+          body: data
+        }, (error, response, body) => {
+          if (error) {
+            callback(error, response, body)
+          } else {
+            callback(null, body)
+          }
+        })
+    }, callback)
 }

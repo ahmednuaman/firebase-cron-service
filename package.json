@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "npm test; webpack; cd build; bestzip ../lambda.zip *",
-    "start": "babel-node ./index.js",
+    "start": "babel-node ./src/index.js",
     "test": "standard"
   },
   "repository": {
@@ -20,7 +20,8 @@
   },
   "homepage": "https://github.com/ahmednuaman/firebase-cron-service#readme",
   "dependencies": {
-    "firebase-admin": "^4.1.1"
+    "firebase-admin": "^4.1.1",
+    "request": "^2.81.0"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",

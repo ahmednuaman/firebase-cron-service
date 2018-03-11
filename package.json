@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "serverless package",
-    "deploy": "AWS_SHARED_CREDENTIALS_FILE=./.aws-credentials NODE_ENV=production serverless deploy --verbose",
+    "deploy": "AWS_SDK_LOAD_CONFIG=1 AWS_SHARED_CREDENTIALS_FILE=./.aws-credentials NODE_ENV=production serverless deploy --verbose",
     "test": "standard --fix --verbose | snazzy"
   },
   "repository": {

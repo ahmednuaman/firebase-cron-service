@@ -6,11 +6,11 @@ provider:
   memorySize: 128
   timeout: 5
   environment:
-    CONFIG: ${file(./config.json)}
-    SERVICE_ACCOUNT_KEY: ${file(./service-account-key.json)}
+    CONFIG: ${file(./config.json.config)}
+    SERVICE_ACCOUNT_KEY: ${file(./service-account-key.json.config)}
 
 functions:
-  hello:
+  index:
     handler: src/index.handler
     events:
       - schedule:

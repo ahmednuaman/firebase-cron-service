@@ -39,6 +39,6 @@ jspm_packages
 # Serverless
 .serverless
 
-config.json
-service-account-key.json
+config.json.config
+service-account-key.json.config
 .aws-credentials

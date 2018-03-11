@@ -1,33 +1,19 @@
-const BUILD_DIR = './build'
-
-const exec = require('child_process').exec
 const path = require('path')
-const webpack = require('webpack')
-const WebpackCleanPlugin = require('clean-webpack-plugin')
-const WebpackCopyPlugin = require('copy-webpack-plugin')
+const slsw = require('serverless-webpack')
+const webpackNodeExternalsPlugin = require('webpack-node-externals')
 
-function NpmInstallPlugin () {}
-
-NpmInstallPlugin.prototype.apply = (compiler) => {
-  compiler.plugin('done', (compilation, callback) => {
-    exec('npm install --production', {
-      cwd: path.resolve(__dirname, BUILD_DIR)
-    }, callback)
-  })
-}
+const absPath = (dir) => path.resolve(process.cwd(), dir)
 
 module.exports = {
-  context: path.resolve(__dirname, 'src'),
-  entry: {
-    index: './index.js'
-  },
+  context: absPath('.'),
+  entry: slsw.lib.entries,
   output: {
     libraryTarget: 'commonjs2',
-    path: BUILD_DIR,
+    path: absPath('build'),
     filename: '[name].js'
   },
   module: {
-    loaders: [{
+    rules: [{
       test: /\.js$/,
       exclude: /node_modules/,
       loader: 'babel-loader'
@@ -36,18 +22,7 @@ module.exports = {
       loader: 'json-loader'
     }]
   },
-  externals: [{
-    'firebase-admin': true
-  }],
+  externals: [webpackNodeExternalsPlugin()],
   target: 'node',
-  plugins: [
-    new WebpackCleanPlugin([BUILD_DIR]),
-    new webpack.optimize.OccurrenceOrderPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.optimize.UglifyJsPlugin(),
-    new WebpackCopyPlugin([{
-      from: '../package.json'
-    }]),
-    new NpmInstallPlugin()
-  ]
+  mode: slsw.lib.webpack.isLocal ? 'development' : 'production'
 }

@@ -4,6 +4,8 @@
   "description": "Trigger stuff on Firebase with cronjobs (or something else)",
   "main": "index.js",
   "scripts": {
+    "build": "serverless package",
+    "deploy": "serverless deploy",
     "test": "standard --fix --verbose | snazzy"
   },
   "repository": {
@@ -23,22 +25,27 @@
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.6.1",
+    "json-loader": "^0.5.7",
     "serverless": "^1.26.1",
     "serverless-webpack": "^5.0.0",
     "snazzy": "^7.1.1",
     "standard": "^11.0.0",
-    "webpack": "^4.1.1"
+    "webpack": "^4.1.1",
+    "webpack-node-externals": "^1.6.0"
   },
   "babel": {
     "presets": [
-      "env",
-      {
-        "targets": {
-          "node": "6.10"
+      [
+        "env",
+        {
+          "targets": {
+            "node": "6.10"
+          }
         }
-      }
+      ]
     ]
   },
   "standard": {

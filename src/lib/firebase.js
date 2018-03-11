@@ -1,9 +1,11 @@
 import * as firebase from 'firebase-admin'
 import request from 'request'
 
-const { firebase: config } = require('../../config.json')
-const serviceAccount = require('../../service-account-key.json')
-const credential = firebase.credential.cert(serviceAccount)
+const {
+  firebase: config
+} = process.env.CONFIG
+
+const credential = firebase.credential.cert(process.env.SERVICE_ACCOUNT_KEY)
 
 firebase.initializeApp({
   credential: credential,
@@ -13,12 +15,10 @@ firebase.initializeApp({
 export default (path, data, callback) => {
   credential
     .getAccessToken()
-    .then(({ access_token }) => {
+    .then(({ access_token: bearer }) => {
       request
         .put(`${config.databaseURL}/${path}.json`, {
-          auth: {
-            bearer: access_token
-          },
+          auth: { bearer },
           json: true,
           body: data
         }, (error, response, body) => {

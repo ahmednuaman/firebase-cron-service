@@ -3,9 +3,9 @@ import request from 'request'
 
 const {
   firebase: config
-} = process.env.CONFIG
+} = JSON.parse(process.env.CONFIG)
 
-const credential = firebase.credential.cert(process.env.SERVICE_ACCOUNT_KEY)
+const credential = firebase.credential.cert(JSON.parse(process.env.SERVICE_ACCOUNT_KEY))
 
 firebase.initializeApp({
   credential: credential,

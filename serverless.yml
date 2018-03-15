@@ -34,7 +34,7 @@ resources:
           Fn::Join:
             - ''
             - - iotbutton_
-              - Ref: ${file(./iot-dash-certs/iot-thing-dsn.txt)}
+              - ${self:custom.iotThingDSN}
 
     IoTPolicy:
       Type: AWS::IoT::Policy
@@ -52,21 +52,19 @@ resources:
                   - ":"
                   - Ref: AWS::AccountId
                   - ":topic/iotbutton/"
-                  - Ref: ${file(./iot-dash-certs/iot-thing-dsn.txt)}
+                  - ${self:custom.iotThingDSN}
 
     IoTPolicyPrincipalAttachment:
       Type: AWS::IoT::PolicyPrincipalAttachment
       Properties:
         PolicyName:
           Ref: IoTPolicy
-        Principal:
-          Ref: ${file(./iot-dash-certs/iot-thing-cert-arn.txt)}
+        Principal: ${self:custom.iotThingCertARN}
 
     IoTThingPrincipalAttachment:
       Type: AWS::IoT::ThingPrincipalAttachment
       Properties:
-        Principal:
-          Ref: ${file(./iot-dash-certs/iot-thing-cert-arn.txt)}
+        Principal: ${self:custom.iotThingCertARN}
         ThingName:
           Ref: IoTThing
 
@@ -77,7 +75,7 @@ resources:
           Fn::Join:
             - ''
             - - iotbutton_
-              - Ref: ${file(./iot-dash-certs/iot-thing-dsn.txt)}
+              - ${self:custom.iotThingDSN}
         TopicRulePayload:
           Actions:
             - Lambda:
@@ -91,12 +89,15 @@ resources:
             Fn::Join:
             - ''
             - - SELECT * FROM 'garden_lights/
-              - Ref: ${file(./iot-dash-certs/iot-thing-dsn.txt)}
+              - ${self:custom.iotThingDSN}
               - "'"
 
 plugins:
   - serverless-webpack
 
 custom:
+  iotThingDSN: ${file(./iot-dash-certs/iot-thing-dsn.txt)}
+  iotThingCertARN: ${file(./iot-dash-certs/iot-thing-cert-arn.txt)}
+
   webpack:
     includeModules: true

@@ -42,3 +42,4 @@ jspm_packages
 config.json.config
 service-account-key.json.config
 .aws-credentials
+iot-dash-certs

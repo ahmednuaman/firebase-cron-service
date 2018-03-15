@@ -27,6 +27,75 @@ functions:
       - iot:
           sql: "SELECT * FROM 'garden_lights'"
 
+resources:
+  Resources:
+    IotThing:
+      Type: AWS::IoT::Thing
+      Properties:
+        ThingName:
+          Fn::Join:
+            - ''
+            - - iotbutton_
+              - Ref: ${file(./iot-dash-certs/iot-thing-dsn.txt)}
+
+    IoTPolicy:
+      Type: AWS::IoT::Policy
+      Properties:
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Action: iot:Publish
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ''
+                - - 'arn:aws:iot:'
+                  - Ref: AWS::Region
+                  - ":"
+                  - Ref: AWS::AccountId
+                  - ":topic/iotbutton/"
+                  - Ref: ${file(./iot-dash-certs/iot-thing-dsn.txt)}
+
+    IoTPolicyPrincipalAttachment:
+      Type: AWS::IoT::PolicyPrincipalAttachment
+      Properties:
+        PolicyName:
+          Ref: IoTPolicy
+        Principal:
+          Ref: ${file(./iot-dash-certs/iot-thing-cert-arn.txt)}
+
+    IoTThingPrincipalAttachment:
+      Type: AWS::IoT::ThingPrincipalAttachment
+      Properties:
+        Principal:
+          Ref: ${file(./iot-dash-certs/iot-thing-cert-arn.txt)}
+        ThingName:
+          Ref: IoTThing
+
+    IoTTopicRule:
+      Type: AWS::IoT::TopicRule
+      Properties:
+        RuleName:
+          Fn::Join:
+            - ''
+            - - iotbutton_
+              - Ref: ${file(./iot-dash-certs/iot-thing-dsn.txt)}
+        TopicRulePayload:
+          Actions:
+            - Lambda:
+                FunctionArn:
+                  Fn::GetAtt:
+                  - IndexLambdaFunction
+                  - Arn
+          AwsIotSqlVersion: '2015-10-08'
+          RuleDisabled: false
+          Sql:
+            Fn::Join:
+            - ''
+            - - SELECT * FROM 'garden_lights/
+              - Ref: ${file(./iot-dash-certs/iot-thing-dsn.txt)}
+              - "'"
+
 plugins:
   - serverless-webpack
 

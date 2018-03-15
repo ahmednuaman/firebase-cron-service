@@ -24,12 +24,10 @@ functions:
           input:
             path: gardenLights
             data: false
-      - iot:
-          sql: "SELECT * FROM 'garden_lights'"
 
 resources:
   Resources:
-    IotThing:
+    IoTThing:
       Type: AWS::IoT::Thing
       Properties:
         ThingName:

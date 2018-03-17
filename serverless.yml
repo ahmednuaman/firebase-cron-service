@@ -24,6 +24,8 @@ functions:
           input:
             path: gardenLights
             data: false
+      - iot:
+          sql: "SELECT * FROM 'iotbutton/${self:custom.iotThingDSN}'"
 
 resources:
   Resources:
@@ -67,30 +69,6 @@ resources:
         Principal: ${self:custom.iotThingCertARN}
         ThingName:
           Ref: IoTThing
-
-    IoTTopicRule:
-      Type: AWS::IoT::TopicRule
-      Properties:
-        RuleName:
-          Fn::Join:
-            - ''
-            - - iotbutton_
-              - ${self:custom.iotThingDSN}
-        TopicRulePayload:
-          Actions:
-            - Lambda:
-                FunctionArn:
-                  Fn::GetAtt:
-                  - IndexLambdaFunction
-                  - Arn
-          AwsIotSqlVersion: '2015-10-08'
-          RuleDisabled: false
-          Sql:
-            Fn::Join:
-            - ''
-            - - SELECT * FROM 'garden_lights/
-              - ${self:custom.iotThingDSN}
-              - "'"
 
 plugins:
   - serverless-webpack

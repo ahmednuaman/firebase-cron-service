@@ -8,22 +8,25 @@ provider:
   timeout: 5
   environment:
     CONFIG: ${file(./config.json.config)}
+    FIREBASE_PATH: gardenLights
     SERVICE_ACCOUNT_KEY: ${file(./service-account-key.json.config)}
 
 functions:
-  index:
-    handler: src/index.handler
+  set:
+    handler: src/index.set
     events:
       - schedule:
           rate: cron(0 15 * * ? *)
           input:
-            path: gardenLights
             data: true
       - schedule:
           rate: cron(30 20 * * ? *)
           input:
-            path: gardenLights
             data: false
+
+  toggle:
+    handler: src/index.toggle
+    events:
       - iot:
           sql: "SELECT * FROM 'iotbutton/${self:custom.iotThingDSN}'"
 

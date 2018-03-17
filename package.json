@@ -6,9 +6,10 @@
   "scripts": {
     "build": "serverless package",
     "deploy": "AWS_SDK_LOAD_CONFIG=1 AWS_SHARED_CREDENTIALS_FILE=./.aws-credentials NODE_ENV=production serverless deploy --verbose",
-    "invoke": "serverless invoke local --function index",
-    "invoke:off": "npm run invoke -- --path test/event/off.json",
-    "invoke:on": "npm run invoke -- --path test/event/on.json",
+    "invoke:set": "serverless invoke local --function set",
+    "invoke:set:off": "npm run invoke:set -- --path test/event/off.json",
+    "invoke:set:on": "npm run invoke:set -- --path test/event/on.json",
+    "invoke:toggle": "serverless invoke local --function toggle",
     "test": "standard --fix --verbose | snazzy"
   },
   "repository": {

@@ -12,21 +12,65 @@ firebase.initializeApp({
   databaseURL: config.databaseURL
 })
 
-export default (path, data, callback) => {
-  credential
-    .getAccessToken()
-    .then(({ access_token: bearer }) => {
-      request
-        .put(`${config.databaseURL}/${path}.json`, {
-          auth: { bearer },
-          json: true,
-          body: data
-        }, (error, response, body) => {
-          if (error) {
-            callback(error, response, body)
-          } else {
-            callback(null, body)
-          }
-        })
-    }, callback)
+let accessToken
+
+const auth = () =>
+  new Promise((resolve, reject) => {
+    if (accessToken) {
+      resolve(accessToken)
+    }
+
+    credential
+      .getAccessToken()
+      .then((auth) => {
+        accessToken = auth.access_token
+
+        resolve(accessToken)
+      }, reject)
+  })
+
+const makeRequest = (method, path, body) =>
+  new Promise(async (resolve, reject) => {
+    try {
+      const bearer = await auth()
+
+      request[method](`${config.databaseURL}/${path}.json`, {
+        body,
+        auth: { bearer },
+        json: true
+      }, (error, response, body) => {
+        if (error) {
+          console.log(error, response, body)
+          reject(error)
+        } else {
+          resolve(body)
+        }
+      })
+    } catch (error) {
+      reject(error)
+    }
+  })
+
+const getRequest = (path) => makeRequest('get', path)
+const putRequest = (body, path) => makeRequest('put', path, body)
+
+export const set = async (path, data, done) => {
+  try {
+    const response = await putRequest(data, path)
+
+    done(null, response)
+  } catch (error) {
+    done(error)
+  }
+}
+
+export const toggle = async (path, done) => {
+  try {
+    const currentValue = await getRequest(path)
+    const response = await putRequest(!currentValue, path)
+
+    done(null, response)
+  } catch (error) {
+    done(error)
+  }
 }
